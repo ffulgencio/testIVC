@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h1>Listado de Paises</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th> Codigo </th>
+            <th> Nombre </th>
+            <th> Estado </th>
+            <th> Acciones</th>
+        </tr>
+    </thead>
+    <tbody  data-bind="foreach: paises">
+        <tr>
+            <td data-bind="text:paisId"></td>
+            <td data-bind="text:nombre"></td>
+            <td><input type="checkbox" data-bind="value:estado"/></td>
+            <td>
+                <button class="btn btn-info btn-sm">Editar</button>
+                <button class="btn btn-danger btn-sm" data-bind="click:borrarPais">Borrar</button>
+            </td>
+        </tr>
+    </tbody>
+
+</table>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-debug.js"></script>
+<script>
+    function vm(){
+        var self = this;
+
+        self.title = ko.observable('Pais');
+
+        self.paises = ko.observableArray([
+            { paisId: 1, nombre: "Republica Dominicana", estado: 1 },
+            { paisId: 2, nombre: "Haiti", estado: 0 },
+        ]);
+
+        self.borrarPais = function () {
+            var res = confirm("Seguro que desea borrar?");
+        }
+
+        self.getPaices = function () {
+            $.get('/pais/getall', function (data) {
+                self.paises = data;
+            })
+        }
+    }
+
+    ko.applyBindings(vm);
+
+</script>
+
