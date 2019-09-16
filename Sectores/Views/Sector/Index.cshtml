@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h1>Listado de Ciudades</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th> Codigo </th>
+            <th> Nombre </th>
+            <th> Pais </th>
+            <th> Estado </th>
+            <th> Acciones</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: paises">
+        <tr>
+            <td data-bind="text:CiudadId"></td>
+            <td data-bind="text:nombre"></td>
+            <td data-bind="text:paisId"></td>
+            <td><input type="checkbox" data-bind="value:estado" readonly /></td>
+            <td>
+                <a href="/pais/editar" class="btn btn-info btn-sm">Editar</a>
+                <button class="btn btn-danger btn-sm" data-bind="click:borrarCiudad">Borrar</button>
+            </td>
+        </tr>
+    </tbody>
+
+</table>
+
+
+<script>
+    function vm(){
+        var self = this;
+
+        self.title = ko.observable('Pais');
+
+        self.paises = ko.observableArray([
+            { paisId: 1, nombre: "Republica Dominicana", estado: 0 },
+            { paisId: 2, nombre: "Haiti", estado: 0 },
+        ]);
+
+        self.borrarPais = function () {
+            var res = confirm("Seguro que desea borrar?");
+        }
+
+        self.getPaices = function () {
+            $.get('/pais/getall', function (data) {
+                self.paises = data;
+            })
+        }
+    }
+
+    ko.applyBindings(vm);
+
+</script>
+

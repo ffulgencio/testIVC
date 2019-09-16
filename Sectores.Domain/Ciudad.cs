@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Sectores.Domain
 {
-    class Ciudad
+    public class Ciudad
     {
         [Key]
         public int CiudadId { get; set; }

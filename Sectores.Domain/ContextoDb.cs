@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Sectores.Domain
 {
-    class ContextoDb: DbContext
+    public class ContextoDb: DbContext
     {
         public DbSet<Pais> Pais { get; set; }
         public DbSet<Ciudad> Ciudad { get; set; }

@@ -14,13 +14,13 @@
             <th> Acciones</th>
         </tr>
     </thead>
-    <tbody  data-bind="foreach: paises">
+    <tbody data-bind="foreach: paises">
         <tr>
             <td data-bind="text:paisId"></td>
             <td data-bind="text:nombre"></td>
-            <td><input type="checkbox" data-bind="value:estado"/></td>
+            <td><input type="checkbox" data-bind="value:estado" readonly /></td>
             <td>
-                <button class="btn btn-info btn-sm">Editar</button>
+                <a href="/pais/editar" class="btn btn-info btn-sm">Editar</a>
                 <button class="btn btn-danger btn-sm" data-bind="click:borrarPais">Borrar</button>
             </td>
         </tr>
@@ -28,30 +28,46 @@
 
 </table>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-debug.js"></script>
+
 <script>
-    function vm(){
-        var self = this;
+    (function () {
+        function vm = {
+            var self = this;
 
-        self.title = ko.observable('Pais');
 
-        self.paises = ko.observableArray([
-            { paisId: 1, nombre: "Republica Dominicana", estado: 1 },
-            { paisId: 2, nombre: "Haiti", estado: 0 },
-        ]);
+            self.title = ko.observable('Pais');
 
-        self.borrarPais = function () {
-            var res = confirm("Seguro que desea borrar?");
+            self.paises = ko.observableArray([
+                { paisId: 1, nombre: "Republica Dominicana", estado: 0 },
+                { paisId: 2, nombre: "Haiti", estado: 0 },
+            ]);
+
+
+            self.borrarPais = function () {
+                var res = confirm("Seguro que desea borrar?");
+                if (res) {
+                    self.getPaises();
+                }
+            }
+
+            self.getPaises = function () {
+                $.get('/pais/listarPaises', function (data) {
+                    self.paises = data;
+                    console.log(self.paises);
+                });
+            }
+
+            //self.getPaises();
         }
 
-        self.getPaices = function () {
-            $.get('/pais/getall', function (data) {
-                self.paises = data;
-            })
-        }
-    }
+       // vm.paises = 
 
-    ko.applyBindings(vm);
+        ko.applyBindings(vm);
+
+    })();  
+
+
+   
 
 </script>
 
