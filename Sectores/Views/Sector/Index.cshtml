@@ -5,55 +5,69 @@
 
 <h1>Listado de Ciudades</h1>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th> Codigo </th>
-            <th> Nombre </th>
-            <th> Pais </th>
-            <th> Estado </th>
-            <th> Acciones</th>
-        </tr>
-    </thead>
-    <tbody data-bind="foreach: paises">
-        <tr>
-            <td data-bind="text:CiudadId"></td>
-            <td data-bind="text:nombre"></td>
-            <td data-bind="text:paisId"></td>
-            <td><input type="checkbox" data-bind="value:estado" readonly /></td>
-            <td>
-                <a href="/pais/editar" class="btn btn-info btn-sm">Editar</a>
-                <button class="btn btn-danger btn-sm" data-bind="click:borrarCiudad">Borrar</button>
-            </td>
-        </tr>
-    </tbody>
+<div id="listado">
+    <table class="table table-striped">
+        <thead>
+            <tr>
 
-</table>
+                <th> Nombre </th>
+                <th> Ciudad </th>
+                <th> Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody data-bind="foreach: sectores">
+            <tr>
+                <td data-bind="text:id, visible:false"></td>
+                <td data-bind="text:nombre"></td>
+                <td data-bind="text:ciudad"></td>
+                <td>
+                    <button class="btn btn-info btn-sm" data-bind="click: $root.editar"  data-toggle="modal" data-target="#myModal">Editar</button>
+                    <button class="btn btn-danger btn-sm">Borrar</button>
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+</div>
 
 
-<script>
-    function vm(){
-        var self = this;
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Registro de sectores </h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="nombre">Nombre</label>
+                        <input type="text" class="form-control" data-bind="value:sector.nombre" />
+                    </div>
+                    <div class="form-group">
+                        <label for="nombre">Ciudad</label>
+                        <select class="form-control" data-bind="value:sector.ciudad">
+                            <option>Santo Domingo</option>
+                            <option>Barahona</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        
+                        <input type="button" class="btn btn-primary btn-lg btn-block" value="Guardar"/>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-        self.title = ko.observable('Pais');
 
-        self.paises = ko.observableArray([
-            { paisId: 1, nombre: "Republica Dominicana", estado: 0 },
-            { paisId: 2, nombre: "Haiti", estado: 0 },
-        ]);
-
-        self.borrarPais = function () {
-            var res = confirm("Seguro que desea borrar?");
-        }
-
-        self.getPaices = function () {
-            $.get('/pais/getall', function (data) {
-                self.paises = data;
-            })
-        }
-    }
-
-    ko.applyBindings(vm);
-
-</script>
+@section scripts{
+    <script type="text/javascript" src="~/KoFiles/sectoresViewModel.js"></script>
+}
 

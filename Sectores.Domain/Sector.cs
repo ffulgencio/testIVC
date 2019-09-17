@@ -11,7 +11,9 @@ namespace Sectores.Domain
         public int SectorId { get; set; }
         [MaxLength(100)]
         public string Nombre { get; set; }
+
         public int CiudadId { get; set; }
+
         public virtual Ciudad Ciudad { get; set; }
     }
 }

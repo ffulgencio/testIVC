@@ -9,10 +9,14 @@ namespace Sectores.Domain
     {
         [Key]
         public int CiudadId { get; set; }
+
         [MaxLength(100)]
         public string Nombre { get; set; }
+
         public int PaisId { get; set; }
+
         public virtual Pais Pais { get; set; }
+
         public bool Estado { get; set; }
 
         public virtual List<Sector> Sectores { get; set; }

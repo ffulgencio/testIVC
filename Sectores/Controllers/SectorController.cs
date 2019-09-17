@@ -14,13 +14,12 @@ namespace Sectores.Controllers
         ContextoDb db = new ContextoDb();
         public ActionResult Index()
         {
-           
             return View();
         }
         [HttpGet]
         public JsonResult getAllSectores()
         {
-            var sectores = db.Sector.ToList();
+            var sectores = db.Sector.Select(s => new { id = s.SectorId, nombre = s.Nombre, ciudad = s.Ciudad.Nombre });
             return Json(sectores, JsonRequestBehavior.AllowGet);
         }
 
@@ -35,7 +34,8 @@ namespace Sectores.Controllers
         public JsonResult getSectoresByName(string nombre)
         {
             var sectores = db.Sector.Include("Ciudad")
-                    .Where(s => s.Nombre.Contains(nombre));
+                    .Where(s => s.Nombre.Contains(nombre))
+                    .Select(s => new {id=s.SectorId, nombre =s.Nombre, ciudad = s.Ciudad.Nombre});
             return Json(sectores, JsonRequestBehavior.AllowGet);
         }
 
