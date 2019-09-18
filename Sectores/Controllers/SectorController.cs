@@ -27,8 +27,8 @@ namespace Sectores.Controllers
         public JsonResult getSectorById (int id)
         {
             var sector = db.Sector.Include("Ciudad")
-                        .Where(s => s.SectorId == id)
-                        .Select(s=> new { sectorId = s.SectorId, nombre = s.Nombre, ciudad = s.Ciudad.Nombre }) ;
+                        .Select(s=> new { sectorId = s.SectorId, nombre = s.Nombre, ciudad = s.Ciudad.Nombre })
+                        .SingleOrDefault(s => s.sectorId == id);
             return Json(sector, JsonRequestBehavior.AllowGet);
         }
 

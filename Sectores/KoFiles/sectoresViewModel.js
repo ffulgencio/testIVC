@@ -39,9 +39,11 @@ $(document).ready(function () {
             var id = sect.sectorId;
             $.getJSON('/sector/getSectorById/' + id, function (data) {
                 self.sector(new SectorModel(data));
+                console.log(self.sector);
+                console.log(data);
             });
                
-                console.log(self.sector);
+                
             };
 
             self.updateSector = function () {
