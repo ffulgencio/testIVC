@@ -46,10 +46,11 @@ $(document).ready(function () {
                 
             };
 
-            self.updateSector = function () {
+        self.updateSector = function () {
 
-            };
-        }
+        };
+
+    }
     var viewModel = new ViewModel();
     ko.applyBindings(viewModel);
 });

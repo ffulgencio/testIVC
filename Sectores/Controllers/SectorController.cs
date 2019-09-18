@@ -24,11 +24,12 @@ namespace Sectores.Controllers
         }
 
         [HttpGet]
-        public JsonResult getSectorById (int id)
+        public JsonResult getSectorById(int id)
         {
             var sector = db.Sector.Include("Ciudad")
-                        .Select(s=> new { sectorId = s.SectorId, nombre = s.Nombre, ciudad = s.Ciudad.Nombre })
-                        .SingleOrDefault(s => s.sectorId == id);
+                         .Where(s => s.SectorId == id)
+                         .Select(s => new { sectorId = s.SectorId, nombre = s.Nombre, ciudad = s.Ciudad.Nombre })
+                         .SingleOrDefault();
             return Json(sector, JsonRequestBehavior.AllowGet);
         }
 
@@ -36,8 +37,8 @@ namespace Sectores.Controllers
         public JsonResult getSectoresByName(string nombre)
         {
             var sectores = db.Sector.Include("Ciudad")
-                    .Where(s => s.Nombre.Contains(nombre))
-                    .Select(s => new {sectorId=s.SectorId, nombre =s.Nombre, ciudad = s.Ciudad.Nombre});
+                        .Where(s => s.Nombre.Contains(nombre))
+                        .Select(s => new { sectorId = s.SectorId, nombre = s.Nombre, ciudad = s.Ciudad.Nombre });
             return Json(sectores, JsonRequestBehavior.AllowGet);
         }
 
