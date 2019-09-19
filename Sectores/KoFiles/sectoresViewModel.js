@@ -5,7 +5,7 @@ $(document).ready(function () {
     function PaisModel(data) {
         var self    = this;
         self.paisId = ko.observable(data !== null && data !== undefined ? data.paisId : null);
-        self.paisId = ko.observable(data !== null && data !== undefined ? data.nombre : null);
+        self.nombre = ko.observable(data !== null && data !== undefined ? data.nombre : null);
     }
 
     function SectorModel(data) {
@@ -30,14 +30,20 @@ $(document).ready(function () {
         self.nombre     = ko.observable('');
         self.ciudad     = ko.observable('');
 
-        self.pais       = ko.observableArray([]);
+        self.paises     = ko.observableArray([]);
         self.ciudades   = ko.observableArray([]);
         self.sectores   = ko.observableArray([]);
 
-        self.sector     = ko.observable(new SectorModel());
+        self.sector = ko.observable(new SectorModel());
+
+        // pendiente
+        self.paises.subscribe(function () {
+
+        });
+      
 
         self.refresh = function () {
-            self.getCiudades();
+            self.getPaises();
             $.getJSON('/sector/getAllSectores', function (data) {
                 self.sectores.removeAll();
                 $.map(data, function (d) {
@@ -83,14 +89,25 @@ $(document).ready(function () {
 
         };
 
-        self.getCiudades = function () {
-            $.get("/ciudad/getCiudades", function (data) {
+        self.getCiudadesPorPais = function (id) {
+            $.get("/ciudad/getCiudadesPorPais/" + id, function (data) {
                 self.ciudades.removeAll();
                
                 $.map(data, function (ciudad) {
                     self.ciudades.push(new CiudadModel(ciudad));
                 });
                 console.log(ko.toJS(self.ciudades));
+            });
+        };
+
+        self.getPaises = function () {
+            $.get("/pais/getPaises", function (data) {
+                self.paises.removeAll();
+
+                $.map(data, function (pais) {
+                    self.paises.push(new PaisModel(pais));
+                });
+                console.log(ko.toJS(self.paises));
             });
         };
 

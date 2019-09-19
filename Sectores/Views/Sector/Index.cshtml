@@ -50,6 +50,10 @@
                         <label for="nombre">Nombre</label>
                         <input type="text" class="form-control" data-bind="value: nombre" />
                     </div>
+                    <div class="form-group">
+                        <label for="nombre">Pais</label>
+                        <select class="form-control" data-bind="options:$parent.paises, optionsText: 'nombre', optionsValue:'paisId', value: paisId, optionsCaption: 'select one' "></select>
+                    </div>
 
                     <div class="form-group">
                         <label for="nombre">Ciudad</label>
