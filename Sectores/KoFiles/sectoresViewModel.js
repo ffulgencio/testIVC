@@ -8,19 +8,24 @@ $(document).ready(function () {
         self.nombre = ko.observable(data !== null && data !== undefined ? data.nombre : null);
     }
 
-    function SectorModel(data) {
+    function SectorModel(data, vm) {
         var self        = this;
         self.ciudadId   = ko.observable(data !== null && data !== undefined ? data.ciudadId : null);
         self.sectorId   = ko.observable(data !== null && data !== undefined ? data.sectorId : null);
         self.nombre     = ko.observable(data !== null && data !== undefined ? data.nombre   : null);
-        self.ciudad     = ko.observable(data !== null && data !== undefined ? data.ciudad   : null);
+        self.ciudad = ko.observable(data !== null && data !== undefined ? data.ciudad : null);
+        self.paisSelectedId = ko.observable();
+        self.paisSelectedId.subscribe(function (p) {
+            vm.getCiudadesPorPais(p);
+        });
     }
 
     function CiudadModel(data) {
         var self        = this;
         self.ciudadId   = ko.observable(data.ciudadId);
         self.nombre     = ko.observable(data.nombre);
-        self.paisId     = ko.observable(data.paisId);
+        self.paisId = ko.observable(data.paisId);
+       
     }
 
     function ViewModel() {
@@ -34,12 +39,10 @@ $(document).ready(function () {
         self.ciudades   = ko.observableArray([]);
         self.sectores   = ko.observableArray([]);
 
-        self.sector = ko.observable(new SectorModel());
+        self.sector = ko.observable(new SectorModel(null, self));
 
         // pendiente
-        self.paises.subscribe(function () {
-
-        });
+      
       
 
         self.refresh = function () {
@@ -47,7 +50,7 @@ $(document).ready(function () {
             $.getJSON('/sector/getAllSectores', function (data) {
                 self.sectores.removeAll();
                 $.map(data, function (d) {
-                    self.sectores.push(new SectorModel(d));
+                    self.sectores.push(new SectorModel(d, self));
                 });
             });
         };
@@ -62,13 +65,13 @@ $(document).ready(function () {
         };
 
         self.close = function () {
-            self.sector(new SectorModel());
+            self.sector(new SectorModel(null, self));
         };
 
         self.editar = function (sector) {
            
             $.getJSON('/sector/getSectorById/' + sector.sectorId(), function (data) {
-                self.sector(new SectorModel(data));
+                self.sector(new SectorModel(data, self));
                 console.log(ko.toJS(self.sector()));
             });
         };
@@ -76,7 +79,7 @@ $(document).ready(function () {
         self.updateSector = function () {
             $.post("/sector/UpdateSector", ko.toJS(self.sector()), function (data, status) {
                 self.refresh();
-                self.sector(new SectorModel());
+                self.sector(new SectorModel(null, self));
                 console.log(ko.toJS(self.sector()));
              
             });

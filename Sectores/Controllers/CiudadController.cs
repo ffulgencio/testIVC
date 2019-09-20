@@ -25,10 +25,10 @@ namespace Sectores.Controllers
         }
 
         [HttpGet]
-        public JsonResult getCiudadesPorPais(int paisId)
+        public JsonResult getCiudadesPorPais(int id)
         {
             var ciudades = db.Ciudad
-                            .Where(s => s.PaisId == paisId)
+                            .Where(s => s.PaisId == id)
                             .Select(s => new { ciudadId = s.CiudadId, nombre = s.Nombre, paisId = s.PaisId });
             return Json(ciudades.ToList(), JsonRequestBehavior.AllowGet);
         }
