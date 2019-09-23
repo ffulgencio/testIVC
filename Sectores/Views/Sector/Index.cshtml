@@ -4,7 +4,7 @@
 }
 
 <h1>Listado de Ciudades</h1>
-<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal"> Create new </button>
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" data-bind="click:createSector"> Create new </button>
 <div>
     <table class="table table-striped">
         <thead>
@@ -62,7 +62,7 @@
                     @*  <span data-bind="text:ciudadId"></span>*@
 
                     <div class="form-group">
-                        <input type="button" class="btn btn-primary btn-lg btn-block" data-bind="click: sectorId() == null || sectorId() == undefined ? $parent.createSector : $parent.updateSector" value="Guardar" data-dismiss="modal" />
+                        <input type="button" class="btn btn-primary btn-lg btn-block" data-bind="click: sectorId() == null || sectorId() == undefined ? $parent.guardarSector : $parent.updateSector" value="Guardar" data-dismiss="modal" />
                     </div>
                     <!-- /ko -->
                 </form>

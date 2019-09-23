@@ -6,6 +6,7 @@ $(document).ready(function () {
         var self    = this;
         self.paisId = ko.observable(data !== null && data !== undefined ? data.paisId : null);
         self.nombre = ko.observable(data !== null && data !== undefined ? data.nombre : null);
+        self.ciudades = ko.observableArray([]);
     }
 
     function SectorModel(data, vm) {
@@ -16,7 +17,9 @@ $(document).ready(function () {
         self.ciudad     = ko.observable(data !== null && data !== undefined ? data.ciudad : null);
         self.paisSelectedId = ko.observable(data !== null && data !== undefined ? data.paisSelectedId : null);
         self.paisSelectedId.subscribe(function (p) {
-            vm.getCiudadesPorPais(p);
+            if (p > 0) {
+                vm.getCiudadesPorPais(p);
+            }
         });
     }
 
@@ -25,7 +28,6 @@ $(document).ready(function () {
         self.ciudadId   = ko.observable(data.ciudadId);
         self.nombre     = ko.observable(data.nombre);
         self.paisId = ko.observable(data.paisId);
-       
     }
 
     function ViewModel() {
@@ -40,10 +42,6 @@ $(document).ready(function () {
         self.sectores   = ko.observableArray([]);
 
         self.sector = ko.observable();
-
-        // pendiente
-      
-      
 
         self.refresh = function () {
             self.getPaises();
@@ -72,6 +70,7 @@ $(document).ready(function () {
         self.editar = function (sector) {
            
             $.getJSON('/sector/getSectorById/' + sector.sectorId(), function (data) {
+                self.getCiudadesPorPais(data.paisSelectedId);
                 self.sector(new SectorModel(data, self));
                 console.log(ko.toJS(self.sector()));
             });
@@ -87,11 +86,15 @@ $(document).ready(function () {
         };
 
         self.createSector = function () {
+            self.sector(new SectorModel(null, self));
+        };
+
+        self.guardarSector = function () {
             $.post("/sector/CreateSector", ko.toJS(self.sector()), function (data, status) {
                 self.refresh();
             });
-
         };
+
         self.getCiudades = function (id) {
             $.get("/ciudad/getCiudades/", function (data) {
                 self.ciudades.removeAll();
@@ -117,15 +120,14 @@ $(document).ready(function () {
         self.getPaises = function () {
             $.get("/pais/getPaises", function (data) {
                 self.paises.removeAll();
-
                 $.map(data, function (pais) {
                     self.paises.push(new PaisModel(pais));
                 });
                 console.log(ko.toJS(self.paises));
             });
         };
-
     }
+
     var viewModel = new ViewModel();
     viewModel.refresh();
     ko.applyBindings(viewModel);
