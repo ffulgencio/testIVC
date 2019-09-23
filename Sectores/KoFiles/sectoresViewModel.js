@@ -45,7 +45,7 @@ $(document).ready(function () {
 
         self.refresh = function () {
             self.getPaises();
-            self.getCiudades();
+            //self.getCiudades();
             $.getJSON('/sector/getAllSectores', function (data) {
                 self.sectores.removeAll();
                 $.map(data, function (d) {
@@ -68,12 +68,14 @@ $(document).ready(function () {
         };
 
         self.editar = function (sector) {
-           
-            $.getJSON('/sector/getSectorById/' + sector.sectorId(), function (data) {
-                self.getCiudadesPorPais(data.paisSelectedId);
-                self.sector(new SectorModel(data, self));
-                console.log(ko.toJS(self.sector()));
+            self.getCiudadesPorPais(sector.paisSelectedId()).then(function () {
+                $.getJSON('/sector/getSectorById/' + sector.sectorId(), function (data) {
+                    //self.getCiudadesPorPais(data.paisSelectedId); // revisar
+                    self.sector(new SectorModel(data, self));
+                    console.log(ko.toJS(self.sector()));
+                });
             });
+         
         };
 
         self.updateSector = function () {
@@ -102,12 +104,12 @@ $(document).ready(function () {
                 $.map(data, function (ciudad) {
                     self.ciudades.push(new CiudadModel(ciudad));
                 });
-                console.log(ko.toJS(self.ciudades));
+                //console.log(ko.toJS(self.ciudades));
             });
         };
 
         self.getCiudadesPorPais = function (id) {
-            $.get("/ciudad/getCiudadesPorPais/" + id, function (data) {
+            return $.get("/ciudad/getCiudadesPorPais/" + id, function (data) {
                 self.ciudades.removeAll();
                
                 $.map(data, function (ciudad) {
